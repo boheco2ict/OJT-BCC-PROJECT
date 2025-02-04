@@ -1,0 +1,90 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, hsl(177, 56%, 67%), #359ee4); 
+    color: hsl(228, 56%, 2%);   
+}
+
+.h-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Set to full viewport height */
+  background: linear-gradient(135deg, hsl(145, 49%, 59%), #189094); /* Corrected gradient syntax */
+}
+
+h2 {
+  font: size 50px;;
+  color: rgba(184, 36, 36, 0.521);
+  margin-bottom: 2.5rem;
+}
+
+form {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(17, 6, 6, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+input {
+  border: 2px solid #00bfae;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  width: 100%; /* Make input field responsive */
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #00c7b7; 
+  box-shadow: 0 0 5px rgba(13, 13, 14, 0.6); 
+}
+
+button {
+  background: linear-gradient(to right, hsl(187, 90%, 62%), hwb(216 8% 48%)); 
+  color: hsl(180, 73%, 51%);
+  padding: 1rem;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+button:hover {
+  background: linear-gradient(to right, hwb(197 35% 7%), hsl(133, 100%, 50%)); 
+  transform: scale(1.05); 
+}
+
+button:focus {
+  outline:#359ee4;
+  box-shadow: 0 0 5px rgba(43, 141, 180, 0.788); 
+}
+
+@media (max-width: 768px) {
+  form {
+    padding: 1.5rem; 
+  }
+}
+  h2 {
+    font-size: 2.5rem; 
+    color: #189094;
+  }
+
+  input {
+    padding: 0.55rem;
+    font-size: 0.95rem; 
+  }
+
+  button {
+    padding: 0.75rem;
+    font-size: 1rem; 
+  } 
