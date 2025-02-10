@@ -12,23 +12,46 @@ function Register() {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [countdown, setCountdown] = useState(0);
+  const [verificationData, setVerificationData] = useState({ code: "", expiresAt: null, isUsed: false });
   const navigate = useNavigate();
 
   useEffect(() => {
     let timer;
     if (countdown > 0) {
       timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    } else {
+      sessionStorage.clear();
     }
-    return () => clearTimeout(timer);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [countdown]);
 
   const handleGetCode = async () => {
     if (countdown > 0) return;
+    
     try {
-      const response = await axios.post("http://localhost:5000/get-code", { email });
+      // Changed by: Mark Kelvin Cadelina
+      /**Your verification code: ${response.data.verificationCode}
+       * If Response 200 - Line 36 Alert ex: "Verification Sent Please Check Your Email"
+       */
+      try {
+        const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+        const expirationTime = Date.now() + 60000; 
+        setVerificationData({ code: generatedCode, expiresAt: expirationTime, isUsed: false });
+        setVerificationCode(generatedCode);
+        setCountdown(60);
+      } catch (error) {
+        console.error("Error getting verification code:", error);
+        alert("Failed to get verification code. Try again.");
+      }
+
+      const response = await axios.post("http://192.168.1.210:3000/verify", { recipient:email });
       if (response.status === 200) {
         setVerificationCode(response.data.verificationCode);
-        alert(`Your verification code: ${response.data.verificationCode}`);
+        alert(`"Verification Sent Please Check Your Email"`);
+        sessionStorage.setItem(response.data.verificationCode, "Valid")
         setCountdown(60);
       }
     } catch (error) {
@@ -36,43 +59,49 @@ function Register() {
       alert("Failed to get verification code. Try again.");
     }
   };
-
+  /**
+   * Sa Register Pwede ra sad na ani rasad e verify 
+   * E Compare lang ang na store na data sa verificationCode from Line 35
+   * 
+   * Create dummy data for verificationCode was Expire, Valid 
+   * Ex: it Will Expire in 60s after 60s verificationCode will be Invalid 
+   * if Successful verificationCode will automatically marked as Exipre
+   */
   const handleRegister = async (e) => {
     e.preventDefault();
-    if (!isVerified) {
-      setError("Please verify your email before registering.");
-      return;
-    }
-  
+
     setLoading(true);
-    setError(null);
-  
-    try {
-      const response = await axios.post("http://localhost:5000/register", { username, email, password });
-      if (response.status === 200) {
-        alert("Registration successful! Redirecting to login.");
-        navigate("/login");
-      }
-    } catch (error) {
-      setError(error.response?.data?.message || "Registration failed. Please try again.");
-    } finally {
+
+    if (enteredCode != verificationCode) {
+      setError("Registration Failed!");
       setLoading(false);
     }
-  };  
 
-  const handleVerify = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:5000/verify-code", { email, code: enteredCode });
-      if (response.status === 200) {
-        setIsVerified(true);
-        alert("Verification successful!");
-      }
-    } catch (error) {
-      setError("Incorrect verification code.");
+    if (enteredCode == verificationCode || sessionStorage.getItem(verificationCode) == "Valid") {
+      setError("Registration Sucessful!");
+      sessionStorage.clear();
+      setVerificationCode("");
+      setLoading(false);
     }
-  };
+
+
+
+    // if (!verificationData.code ||  Date.now() > verificationData.expiresAt) {
+    //   setError("Verification code has already expired.");
+    //   return;
+    // } 
+    // if (verificationData.isUsed || enteredCode === verificationData.code) {
+    //   setError("Verification code is invalid or has already been used. Please request a new one.");
+    //   return;
+    // }
+    // if (enteredCode !== verificationData.code) {
+    //   setError("Registration Sucessful!");
+    //   return;  
+    // }
   
+    
+    
+  };  
 
   const handleExit = () => {
     navigate("/");
@@ -80,7 +109,7 @@ function Register() {
 
   return (
     <div className="h-screen flex flex-col justify-center items-center bg-green-100">
-      <div className="w-96 bg-white p-6 rounded shadow-md relative">
+      <div className="w-90 bg-aqua p-1 rounded shadow-md relative">
         <div className="absolute top-4 right-4 cursor-pointer" onClick={handleExit}>
           <span className="text-2xl text-red-600">X</span>
         </div>
@@ -132,7 +161,7 @@ function Register() {
               type="button"
               onClick={handleGetCode}
               className={`absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 width-1/4 ${
-              countdown > 0 ? "bg-gray-400" : "bg-blue-500"
+              countdown > 0 ? "bg-gray-400" : "bg-green-500"
               } text-white rounded`}
               disabled={countdown > 0}
               >

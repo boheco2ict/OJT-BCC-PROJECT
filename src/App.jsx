@@ -4,18 +4,19 @@ import { Link, Routes, Route, useNavigate } from 'react-router-dom';
 function Home() {
   const navigate = useNavigate();
   return (
-    <div className="h-screen flex flex-col justify-start items-center bg-gradient-to-r from-blue-800 to-purple-700">
-    <h1 className="text-5xl font-extrabold text-white mb-6 mt-12 tracking-normal drop-shadow-lg">Welcome to My App</h1>
-      <div className="space-y-4 w-full max-w-md px-8 py-10 bg-white bg-opacity-80 shadow-xl backdrop-blur-lg">
+    <div className="h-screen flex flex-col justify-between items-center bg-gradient-to-r from-blue-800 to-purple-700 p-10">
+      <div className="flex-grow"></div>
+      <div className="space-y-4 w-full max-w-md px-5 py-10 bg-opacity-80 shadow-xl backdrop-blur-m">
         <button
           onClick={() => navigate('/login')}
-          className="w-full px-5 py-4 bg-teal-500 text-white font-semibold shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-1xl"
+          className="w-full px-5 py-4 bg-teal-500 text-black font-semibold shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-1xl"
         >
           Login   
         </button>
+        
         <button
           onClick={() => navigate('/register')}
-          className="border w-full px-5 py-4 bg-green-500 text-white font-semibold shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+          className="border w-full px-5 py-4 bg-teal-500 text-black font-semibold shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-1xl"
         >
           Register
         </button>
@@ -24,11 +25,12 @@ function Home() {
   );
 }
 
+
 function Login() {
   const navigate = useNavigate();
   return ( 
     <div className="h-screen flex flex-col justify-center items-center bg-gray-100">
-      <div className="w-full max-w-sm bg-white p-6 shadow-md">
+      <div className="w-full max-w-sm bg-none p-6 shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login</h2>
         <form>
           <input
@@ -180,7 +182,7 @@ function Register() {
 
 const appStyles = {
   backgroundImage: "url('/background.jpeg')",
-  backgroundSize: "cover",
+  backgroundSize:"none",
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
   minHeight: "100vh",
